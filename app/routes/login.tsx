@@ -2,6 +2,7 @@ import { Layout } from "~/components/Layout";
 import { FormField } from "~/components/Form-field";
 import { useState } from "react";
 import { ActionFunction, json } from "@remix-run/node";
+import { validateEmail, validateName, validatePassword } from "~/utils/validators.server";
 
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
