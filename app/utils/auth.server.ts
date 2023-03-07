@@ -1,4 +1,4 @@
-import { json, createCookieSessionStorage } from "@remix-run/node";
+import { json, createCookieSessionStorage, redirect } from "@remix-run/node";
 import { prisma } from "./prisma.server";
 import type { RegisterForm, LoginForm } from "./types.server";
 import { createUser } from "./user.server";
@@ -37,7 +37,7 @@ export const register = async (form: RegisterForm) => {
       { status: 400 }
     );
   }
-  return null;
+  return createUserSession(newUser.id, "/");
 };
 
 export const login = async (form: LoginForm) => {
@@ -46,5 +46,15 @@ export const login = async (form: LoginForm) => {
   if (!user || !(await bcrypt.compare(form.password, form.password))) {
     return json({ error: "Incorrect login" }, { status: 400 });
   }
-  return null;
+  return createUserSession(user.id, "/");
+};
+
+export const createUserSession = async (userId: string, redirectTo: string) => {
+  const session = await storage.getSession();
+  session.set("userId", userId);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await storage.commitSession(session),
+    },
+  });
 };
