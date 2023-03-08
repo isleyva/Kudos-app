@@ -9,7 +9,7 @@ export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
     const action = form.get("_action")
     const email = form.get("email")
-    const password = form.get("password")
+    const password = form.get("password") 
     let firstName = form.get("firstName")
     let lastName = form.get("lastName")
 

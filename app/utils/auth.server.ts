@@ -4,8 +4,8 @@ import type { RegisterForm, LoginForm } from "./types.server";
 import { createUser } from "./user.server";
 import bcrypt from "bcryptjs";
 
-const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret) {
+const session = process.env.SESSION_SECRET;
+if (!session) {
   throw new Error("SESSION_SECRET must be set");
 }
 
@@ -13,7 +13,7 @@ const storage = createCookieSessionStorage({
   cookie: {
     name: "kudos-session",
     secure: process.env.NODE_ENV === "production",
-    secrets: [sessionSecret],
+    secrets: [session],
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
