@@ -7,7 +7,7 @@ import { login, register } from "~/utils/auth.server";
 
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
-    const action = form.get("_action")
+    const action = form.get("_action")  
     const email = form.get("email")
     const password = form.get("password") 
     let firstName = form.get("firstName")
@@ -60,7 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Login() {
-    const [action, setAction] = useState("login");
+    const [action, setAction] = useState("login"); 
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -119,7 +119,7 @@ export default function Login() {
                             />
 
                           <FormField
-                              htmlFor="lastname"
+                                htmlFor="lastName"
                               label="Last Name"
                               value={formData.lastName}
                               onChange={(e) => handleInputChange(e, "lastName")}
