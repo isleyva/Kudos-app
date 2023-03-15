@@ -1,6 +1,6 @@
 import { Layout } from "~/components/Layout";
 import { FormField } from "~/components/Form-field";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActionFunction, json } from "@remix-run/node";
 import { validateEmail, validateName, validatePassword } from "~/utils/validators.server";
 import { login, register } from "~/utils/auth.server";
@@ -65,11 +65,12 @@ export default function Login() {
     const [formError, setFormError] = useState(actionData?.error || '')
     const [errors, setErrors] = useState(actionData?.errors || {})
     const [action, setAction] = useState("login"); 
+    const firstLoad = useRef(true)
     const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
+        email: actionData?.fields?.email || "",
+        password: actionData?.fields?.password || "",
+        firstName: actionData?.fields?.firstName || "",
+        lastName: actionData?.fields?.lastName || "",
   });
 
     const handleInputChange = (
@@ -81,6 +82,27 @@ export default function Login() {
           [field]: event.target.value,
     }));
   };
+    useEffect(() => {
+        if (!firstLoad.current) {
+            const newState = {
+                email: '',
+                password: '',
+                firstName: '',
+                lastName: '',
+            }
+            setErrors(newState)
+            setFormError('')
+            setFormData(newState)
+        }
+    }, [action])
+
+    useEffect(() => {
+        if (!firstLoad.current) {
+            setFormError('')
+        }
+    }, [formData])
+
+    // useEffect(() => { firstLoad.current = false }, [])
 
     return (
         <Layout>
