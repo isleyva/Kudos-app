@@ -1,7 +1,8 @@
 import { Layout } from "~/components/Layout";
 import { FormField } from "~/components/Form-field";
 import { useEffect, useRef, useState } from "react";
-import { ActionFunction, json } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { validateEmail, validateName, validatePassword } from "~/utils/validators.server";
 import { login, register } from "~/utils/auth.server";
 import { useActionData } from "@remix-run/react";
@@ -83,7 +84,8 @@ export default function Login() {
     }));
   };
     useEffect(() => {
-        if (!firstLoad.current) {
+        // Clear if we switch forms 
+        if (actionData?.form !== action) {
             const newState = {
                 email: '',
                 password: '',
@@ -97,10 +99,14 @@ export default function Login() {
     }, [action])
 
     useEffect(() => {
+        //Same for errors
         if (!firstLoad.current) {
             setFormError('')
         }
     }, [formData])
+
+
+    //useEffect(() => { firstLoad.current = false }, [])
 
 
     return (
@@ -127,7 +133,7 @@ export default function Login() {
                         label="Email"
                         value={formData.email}
                         onChange={(e) => handleInputChange(e, "email")}
-                        error={errors.email}
+                        error={errors?.email}
                     />
                     <FormField
                         htmlFor="password"
@@ -135,7 +141,7 @@ export default function Login() {
                         value={formData.password}
                         onChange={(e) => handleInputChange(e, "password")}
                         type="password"
-                        error={errors.password}
+                        error={errors?.password}
                     />
                     {action !== "login" ? (
                         <>
@@ -144,7 +150,7 @@ export default function Login() {
                                 label="First Name"
                                 value={formData.firstName}
                                 onChange={(e) => handleInputChange(e, "firstName")}
-                                error={errors.firstName}
+                                error={errors?.firstName}
                             />
 
                           <FormField
@@ -152,7 +158,7 @@ export default function Login() {
                               label="Last Name"
                               value={formData.lastName}
                                 onChange={(e) => handleInputChange(e, "lastName")}
-                                error={errors.lastName}
+                                error={errors?.lastName}
                           />
                       </>
                   ) : null}
@@ -172,3 +178,5 @@ export default function Login() {
       </Layout>
   );
 }
+
+// TO DO: Add formik.
