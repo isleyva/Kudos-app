@@ -85,7 +85,7 @@ export default function Login() {
   };
     useEffect(() => {
         // Clear if we switch forms 
-        if (actionData?.form !== action) {
+        if (!firstLoad.current) {
             const newState = {
                 email: '',
                 password: '',
@@ -179,4 +179,4 @@ export default function Login() {
   );
 }
 
-// TO DO: Add formik.
+// TO DO: Add formik
