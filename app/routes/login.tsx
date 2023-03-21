@@ -1,11 +1,18 @@
 import { Layout } from "~/components/Layout";
 import { FormField } from "~/components/Form-field";
 import { useEffect, useRef, useState } from "react";
-import type { ActionFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from '@remix-run/node';
 import { validateEmail, validateName, validatePassword } from "~/utils/validators.server";
 import { login, register } from "~/utils/auth.server";
 import { useActionData } from "@remix-run/react";
+import { getUser } from "~/utils/auth.server";
+
+//If user have session or create one, redirect to index
+export const loader: LoaderFunction = async ({ request }) => {
+    return await getUser(request) ? redirect("/") : null
+
+}
 
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
@@ -71,14 +78,14 @@ export default function Login() {
         email: actionData?.fields?.email || "",
         password: actionData?.fields?.password || "",
         firstName: actionData?.fields?.firstName || "",
-        lastName: actionData?.fields?.lastName || "",
+        lastName: actionData?.fields?.lastName || ""
   });
 
     const handleInputChange = (
         event: React.ChangeEvent<HTMLInputElement>,
         field: string
   ) => {
-      setFormData((form) => ({
+        setFormData(form => ({
           ...form,
           [field]: event.target.value,
     }));
@@ -90,7 +97,7 @@ export default function Login() {
                 email: '',
                 password: '',
                 firstName: '',
-                lastName: '',
+                lastName: ''
             }
             setErrors(newState)
             setFormError('')
