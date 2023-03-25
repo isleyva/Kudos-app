@@ -1,7 +1,7 @@
 import { json, createCookieSessionStorage, redirect } from "@remix-run/node";
 import { prisma } from "./prisma.server";
 import type { RegisterForm, LoginForm } from "./types.server";
-import { createUser } from "./user.server";
+import { createUser } from "./users.server";
 import bcrypt from "bcryptjs";
 
 //Create cookie
